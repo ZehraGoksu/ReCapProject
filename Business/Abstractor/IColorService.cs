@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccess.Abstractor
+namespace Business.Abstractor
 {
-	public interface ICarDal:IEntityRepository<Car>
+	public interface IColorService
 	{
-
-
+		List<Color> GetAll();
 	}
 }
