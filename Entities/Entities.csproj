@@ -8,4 +8,12 @@
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractor\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
 </Project>
