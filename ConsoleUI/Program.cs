@@ -30,6 +30,10 @@ namespace ConsoleUI
 			{
 				Console.WriteLine("Araç Bilgileri: " + cars.CarName + "  " + cars.Description + "  " + cars.DailyPrice + " tl'dir.");
 			}
+			foreach (var cars in carManager.GetCarDetails()) 
+			{
+				Console.WriteLine(cars.CarName + " " + cars.BrandName + " " + cars.ColorName);
+			}
 			
 			
 		}
