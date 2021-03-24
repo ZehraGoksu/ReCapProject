@@ -13,5 +13,7 @@ namespace Business.Constants
 		public static string Updated = "Güncelleme işlemi başarılı.";
 		public static string Deleted = "Silme işlemi başarılı.";
 		public static string Listed = "Tüm kayıtlar listelendi.";
+		public static string AddedErrorCompanyName = "Şirket adı en az iki karakterden oluşmalıdır!";
+		public static string AddedErrorCarId = "Araç Id numarası geçersizdir.";
 	}
 }
