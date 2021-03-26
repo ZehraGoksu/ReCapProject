@@ -19,9 +19,9 @@ namespace Business.Concrete
 		{
 			_customerDal = customerDal;
 		}
+		[Core.Aspects.Autofac.Validation.ValidationAspect(typeof(ColorValidator))]
 		public IResult Add(Customer customer)
 		{
-			ValidationTool.Validate(new CustomerValidator(), customer);
 			_customerDal.Add(customer);
 			return new SuccessResult(Messages.Added);
 		}
