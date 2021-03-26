@@ -1,5 +1,7 @@
 ﻿using Business.Abstractor;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstractor;
 using Entities.Concrete;
@@ -21,23 +23,11 @@ namespace Business.Concrete
 
 		public IResult Add(Car car)
 		{
-			//Araba ismi minimum 2 karakter olmalıdır
-
-			//Araba günlük fiyatı 0'dan büyük olmalıdır.
-			if(car.CarName.Length < 2)
-			{
-				return new SuccessResult(Messages.AddedErrorCarName);
-				
-			}
-			else if(car.DailyPrice <= 0)
-			{
-				return new SuccessResult(Messages.AddedErrorDaily);
-			}
-			else
-			{
+			ValidationTool.Validate(new CarValidator(), car);
+			
 				_carDal.Add(car);
 				return new SuccessResult(car.CarName + Messages.Added);
-			}
+		
 		}
 
 		public IResult Delete(Car car)
