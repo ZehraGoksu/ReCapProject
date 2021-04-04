@@ -15,5 +15,6 @@ namespace Business.Constants
 		public static string Listed = "Tüm kayıtlar listelendi.";
 		public static string AddedErrorCompanyName = "Şirket adı en az iki karakterden oluşmalıdır!";
 		public static string AddedErrorCarId = "Araç Id numarası geçersizdir.";
+		public static string CarImageLimitExceed = "Bir araç için en fazla 5 fotoğraf eklenebilir.";
 	}
 }
