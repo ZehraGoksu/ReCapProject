@@ -14,22 +14,21 @@ namespace Core.Utilities.Security.JWT
 {
     public class JwtHelper : ITokenHelper
     {
-        public IConfiguration Configuration { get; } //web apide appsetting dekileri okumaya yarıyor
-        private TokenOptions _tokenOptions; //appsetting de okuduğum değerleri tokensoptionsa atayacağız
-        private DateTime _accessTokenExpiration; //accesstoken ne zaman geçersizleşicek
-        public JwtHelper(IConfiguration configuration) //constructora da bunu enjekte ederek o bilgiye erişebiliyoruz
+        public IConfiguration Configuration { get; } 
+        private TokenOptions _tokenOptions; 
+        private DateTime _accessTokenExpiration; 
+        public JwtHelper(IConfiguration configuration) 
         {
             Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>(); //configurationdaki alanı bul Tokenoptionsu appsettingden al ve maple, eşleştir ordakilerle
-                                                                                          //configuration görürsek o appSetting demek
+            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>(); 
 
         }
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {
-            _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration); //ne zaman bitecek, şu andan itibaren üzerine dakika olarak ekle
-            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey); //anahtar değerini de appsetting içinden al ve securitykey oluştur
-            var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey); //hangi algoritme ve anahtarı kullanacak
-            var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims); //jwt de olması gerekenler tokenoption(appsetting) ,hangi kullanıcı için ve claimleri neleri bu metotla ortaya çıkarıcaz
+            _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration); 
+            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey); 
+            var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey); 
+            var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwt);
 
@@ -41,27 +40,27 @@ namespace Core.Utilities.Security.JWT
 
         }
 
-        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, //aslında bu metot zaten hazırda var ama biz buna yeni metotlar ekleyebiliriz buna extension(genişetme) deniyor.
-            SigningCredentials signingCredentials, List<OperationClaim> operationClaims) //verilen tüm parametleri vererek bir jwt oluştururuz
+        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, 
+            SigningCredentials signingCredentials, List<OperationClaim> operationClaims) 
         {
-            var jwt = new JwtSecurityToken( //jwt oluşturudk ilgili bilgileri girdik
+            var jwt = new JwtSecurityToken(
                 issuer: tokenOptions.Issuer,
                 audience: tokenOptions.Audience,
                 expires: _accessTokenExpiration,
-                notBefore: DateTime.Now, //şu andan önceki bir değer verilemez
-                claims: SetClaims(user, operationClaims), //claimler oluşturulurken yardımcı metot oluşrutulmuş
+                notBefore: DateTime.Now, 
+                claims: SetClaims(user, operationClaims), 
                 signingCredentials: signingCredentials
             );
             return jwt;
         }
 
-        private IEnumerable<Claim> SetClaims(User user, List<OperationClaim> operationClaims) //bu yardımcı metot claim listesini oluşturuyo kullanıcının
+        private IEnumerable<Claim> SetClaims(User user, List<OperationClaim> operationClaims) 
         {
-            var claims = new List<Claim>(); //sadece claimler olmak zorunda değil kullanıcıya ait birçok bilgi olabilir
+            var claims = new List<Claim>(); 
             claims.AddNameIdentifier(user.Id.ToString());
             claims.AddEmail(user.Email);
-            claims.AddName($"{user.FirstName} {user.LastName}");//başa dolar ekleyince içine kod yazabiliriz iki string birleştirilmiş
-            claims.AddRoles(operationClaims.Select(c => c.Name).ToArray()); //namelerini çekip arraya basıp rolleri ekliyor
+            claims.AddName($"{user.FirstName} {user.LastName}");
+            claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
 
             return claims;
         }

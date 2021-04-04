@@ -7,21 +7,20 @@ namespace Core.Utilities.Security.Hashing
 	public class HashingHelper
 	{
 		public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-		{// bir password vericez ve dışarıya şu iki değeri çıkarıcak bir yapı yapıcaz hash ve salt
+		{
 
-			using (var hmac = new System.Security.Cryptography.HMACSHA512())//kriptografi sınıfındaki 512 algoritmasını kullanıyoruz.
+			using (var hmac = new System.Security.Cryptography.HMACSHA512())
 			{
 				passwordSalt = hmac.Key;
-				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));//byte array olarak göndermiş olduk passwordu
+				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 			}
 
 		}
-		public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)//passwordhashi doğrula diyoruz out a gerek yok bu değerleir biz vericez
-		{                                                                                               //yani kişinin girdiği veritabanına kayıtlı olan şifresini giriyor ve onu doğrulayacağız
-
+		public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+		{                                                                                              
 			using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
 			{
-				var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));//saltıkullanması gerktiğini zaten yukarda söyledik
+				var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 				for (int i = 0; i < computedHash.Length; i++)
 				{
 					if (computedHash[i] != passwordHash[i])

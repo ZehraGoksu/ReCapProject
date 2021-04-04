@@ -10,14 +10,11 @@ namespace Core.Extensions
     {
         public static List<string> Claims(this ClaimsPrincipal claimsPrincipal, string claimType)
         {
-            var result = claimsPrincipal?.FindAll(claimType)?.Select(x => x.Value).ToList(); //bir kişinin tokenlarını jwt dan gelen claimlerini okumak için claimsPrincipal classını genişletiriz
-                                                                                             //bir kişinin """"""" .net deki classı bu
-                                                                                             //hangi claimtype bulucaz mesela rolleri mi istiyeceğiz ona göre bu kodları yazdık
-                                                                                             //? null olabilir demek
+            var result = claimsPrincipal?.FindAll(claimType)?.Select(x => x.Value).ToList(); 
             return result;
         }
 
-        public static List<string> ClaimRoles(this ClaimsPrincipal claimsPrincipal)//bana çoğunlukla roller lazımsa direk roller döndürülüyor
+        public static List<string> ClaimRoles(this ClaimsPrincipal claimsPrincipal)
         {
             return claimsPrincipal?.Claims(ClaimTypes.Role);
         }

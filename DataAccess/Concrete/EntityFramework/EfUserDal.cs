@@ -21,8 +21,7 @@ namespace DataAccess.Concrete.EntityFramework
                              where userOperationClaim.UserId == user.Id
                              select new OperationClaim { Id = operationClaim.Id, Name = operationClaim.Name };
                 return result.ToList();
-                //operationClaimlerle userOperationClaimlere join atıyor içerisinde id si bizim gönderdiğimiz user a eşit id yi buluyor operationClaim olarak return ediyoruz
-
+                
             }
         }
     }

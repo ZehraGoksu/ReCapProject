@@ -8,9 +8,8 @@ using System.Text;
 namespace Core.Extensions
 {
     public static class ClaimExtensions
-    {    //varolan bir classa kendi metotlarımızı eklemiş olabiliriz
-         //extendion metot yazabilmek için hem metot hem class static olmalı
-        public static void AddEmail(this ICollection<Claim> claims, string email)//this kısmı-> ben bunu extend ediyorum bu metotu thisli yapının içine ekle demek claims bize ait değil çünkü
+    {    
+        public static void AddEmail(this ICollection<Claim> claims, string email)
         {
             claims.Add(new Claim(JwtRegisteredClaimNames.Email, email));
         }
@@ -27,7 +26,7 @@ namespace Core.Extensions
 
         public static void AddRoles(this ICollection<Claim> claims, string[] roles)
         {
-            roles.ToList().ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role))); //rolleri listeye çevir her birini tek tek dolaş her bir rolü git claime ekle 
+            roles.ToList().ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role))); 
         }
     }
 }

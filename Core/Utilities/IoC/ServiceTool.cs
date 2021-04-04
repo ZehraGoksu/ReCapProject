@@ -7,12 +7,9 @@ namespace Core.Utilities.IoC
 {
     public static class ServiceTool
     {
-        //enjection altyapısını aynen okuyabilmek için araç
-        //web apideki gibi enjections oluşturabilmemizi sağlıyor
-        //istediğimiz herhangi bir interface in servicedeki karşılığını bu tool vasıtasıyla alabiliriz
         public static IServiceProvider ServiceProvider { get; private set; }
 
-        public static IServiceCollection Create(IServiceCollection services) //.net servislerini kullanarak onları build et
+        public static IServiceCollection Create(IServiceCollection services)
         {
             ServiceProvider = services.BuildServiceProvider();
             return services;
