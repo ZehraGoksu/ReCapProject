@@ -74,7 +74,7 @@ namespace ConsoleUI
 		{
 			UserManager userManager = new UserManager(new EfUserDal());
 			CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
-			customerManager.Add(new Customer { CompanyName = "Logo", UserId = userManager.GetById(1).Data.UserId });
+			customerManager.Add(new Customer { CompanyName = "Logo", UserId = userManager.GetById(1).Data.Id });
 
 		}
 		 private static void RentalTest()
