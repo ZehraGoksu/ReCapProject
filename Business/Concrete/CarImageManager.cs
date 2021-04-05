@@ -1,6 +1,8 @@
 ﻿using Business.Abstractor;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers;
@@ -25,7 +27,7 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(IFormFile file, CarImage carImage)
         {
@@ -42,7 +44,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Added);
         }
 
-
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Delete(CarImage carImage)
         {
@@ -59,24 +61,22 @@ namespace Business.Concrete
         }
 
 
-
+        [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(), Messages.Listed);
         }
 
 
-
-
+        [CacheAspect]
         public IDataResult<CarImage> GetById(int id)
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.ImageId == id));
         }
 
 
-
         [ValidationAspect(typeof(CarImageValidator))]
-
+        [SecuredOperation("admin")]
         public IResult Update(IFormFile file, CarImage carImage)
         {
             var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(c => c.ImageId == carImage.ImageId).ImagePath;

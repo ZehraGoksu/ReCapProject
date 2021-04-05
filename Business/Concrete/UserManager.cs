@@ -1,6 +1,8 @@
 ﻿using Business.Abstractor;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
@@ -22,6 +24,7 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
+
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Listed);
@@ -30,7 +33,10 @@ namespace Business.Concrete
         public IDataResult<User> GetById(int Id)
         {
             return new SuccessDataResult<User>(_userDal.Get(r => r.Id == Id));
-        } 
+        }
+
+        [SecuredOperation("admin")]
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
             _userDal.Add(user);
@@ -38,28 +44,30 @@ namespace Business.Concrete
 
         }
 
+        [SecuredOperation("admin")]
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
             return new SuccessResult(user.Id + Messages.Deleted);
         }
+
+        [SecuredOperation("admin")]
         public IResult Update(User user)
         {
             _userDal.Update(user);
             return new SuccessResult(user.Id + Messages.Updated);
         }
 
-		public List<OperationClaim> GetClaims(User user)
+        [CacheAspect]
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
 		{
-            return _userDal.GetClaims(user); 
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
         }
 
-		User IUserService.GetByMail(string email)
+        [CacheAspect]
+        public IDataResult<User> GetByMail(string email)
 		{
-            return _userDal.Get(u => u.Email == email);
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
         }
-       
-
-
-    }
+	}
 }
