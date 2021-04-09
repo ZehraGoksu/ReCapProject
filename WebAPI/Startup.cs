@@ -75,6 +75,8 @@ namespace WebAPI
 
 			app.UseHttpsRedirection();
 
+			app.UseStaticFiles();
+
 			app.UseRouting();
 
 			app.UseAuthentication();

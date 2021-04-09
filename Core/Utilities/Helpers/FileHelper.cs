@@ -9,35 +9,29 @@ namespace Core.Utilities.Helpers
 {
     public class FileHelper
     {
-        public static string AddAsync(IFormFile file)
+        public static string Add(IFormFile file)
         {
             var result = newPath(file);
             try
             {
-                var sourcepath = Path.GetTempFileName();
+                var sourcePath = Path.GetTempFileName();
                 if (file.Length > 0)
-                    using (var stream = new FileStream(sourcepath, FileMode.Create))
+                    using (var stream = new FileStream(sourcePath, FileMode.Create))
                         file.CopyTo(stream);
-
-                File.Move(sourcepath, result.newPath);
+                File.Move(sourcePath, result.newPath);
             }
             catch (Exception exception)
             {
-
                 return exception.Message;
             }
-
             return result.Path2;
         }
 
-        public static string UpdateAsync(string sourcePath, IFormFile file)
+        public static string Update(string sourcePath, IFormFile file)
         {
             var result = newPath(file);
-
             try
             {
-                //File.Copy(sourcePath,result);
-
                 if (sourcePath.Length > 0)
                 {
                     using (var stream = new FileStream(result.newPath, FileMode.Create))
@@ -45,20 +39,26 @@ namespace Core.Utilities.Helpers
                         file.CopyTo(stream);
                     }
                 }
-
                 File.Delete(sourcePath);
             }
-            catch (Exception excepiton)
+            catch (Exception exception)
             {
-                return excepiton.Message;
+                return exception.Message;
             }
-
             return result.Path2;
         }
 
-        public static IResult DeleteAsync(string path)
+        public static IResult Delete(string path)
         {
-            File.Delete(path);
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception exception)
+            {
+                return new ErrorResult(exception.Message);
+            }
+
             return new SuccessResult();
         }
 
@@ -67,19 +67,14 @@ namespace Core.Utilities.Helpers
             FileInfo ff = new FileInfo(file.FileName);
             string fileExtension = ff.Extension;
 
-            var creatingUniqueFilename = Guid.NewGuid().ToString("N")
-               + "_" + DateTime.Now.Month + "_"
-               + DateTime.Now.Day + "_"
-               + DateTime.Now.Year + fileExtension;
+            var newPath = Guid.NewGuid() + fileExtension;
 
 
             string path = Environment.CurrentDirectory + @"\wwwroot\Images";
 
-            string result = $@"{path}\{creatingUniqueFilename}";
+            string result = $@"{path}\{newPath}";
 
-            return (result, $"\\Images\\{creatingUniqueFilename}");
-
-
+            return (result, $"\\Images\\{newPath}");
         }
     }
 }
