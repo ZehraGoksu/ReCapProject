@@ -11,6 +11,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -27,8 +28,16 @@ namespace Business.Concrete
 		[SecuredOperation("admin")]
 		public IResult Add(Rental rental)
 		{
-			_rentalDal.Add(rental);
-			return new SuccessResult(Messages.Added);
+			var cardata1 = _rentalDal.GetAll(p => p.CarId == rental.CarId).Last();
+			var cardataDate = _rentalDal.GetAll(p => p.RentDate == rental.RentDate);
+			var cardataDate2 = _rentalDal.GetAll(p => p.ReturnDate == rental.ReturnDate);
+
+			if (cardata1.ReturnDate != null && cardata1.RentDate < rental.RentDate && cardata1.ReturnDate < rental.ReturnDate)
+			{
+				_rentalDal.Add(rental);
+				return new SuccessResult();
+			}
+			return new ErrorResult(Messages.CarRentalError);
 
 		}
 

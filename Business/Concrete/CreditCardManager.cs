@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
-	public class CreditCardManager:ICreditCard
+	public class CreditCardManager:ICreditCardService
 	{
         ICreditCardDal _creditCardDal;
 
@@ -17,17 +17,27 @@ namespace Business.Concrete
             _creditCardDal = creditCardDal;
         }
 
-        public IResult Add(CreditCard entity)
+        public IResult Add(CreditCard card)
         {
-            _creditCardDal.Add(entity);
+            _creditCardDal.Add(card);
             return new SuccessResult("Ödeme işlemi başarılı bir şekilde gerçekleştirildi.");
         }
 
-        public IResult Delete(CreditCard entity)
+        public IResult Delete(CreditCard card)
         {
-            _creditCardDal.Delete(entity);
+            _creditCardDal.Delete(card);
             return new SuccessResult("Kart bilgileriniz silindi.");
 
+        }
+        public IResult MakePayment(CreditCard card)
+        {
+            int random = new Random().Next(0, 2);
+            if (random == 0)
+            {
+                return new ErrorResult();
+            }
+
+            return new SuccessResult();
         }
 
         public IDataResult<List<CreditCard>> GetByCustomerId(int customerId)
@@ -35,9 +45,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll(c => c.CustomerId == customerId));
         }
 
-        public IResult Update(CreditCard entity)
+        public IResult Update(CreditCard card)
         {
-            _creditCardDal.Update(entity);
+            _creditCardDal.Update(card);
             return new SuccessResult("Kartınız güncellendi.");
 
         }

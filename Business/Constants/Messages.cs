@@ -24,5 +24,7 @@ namespace Business.Constants
 		public static string PasswordError = "Parola hatası!";
 		public static string UserNotFound = "Kullanıcı bulunamadı!";
 		public static string UserRegistered = "Kayıt oldu";
+
+		public static string CarRentalError = "Araç bu tarihler arasında bir başkası tarafından kiralanmıştır.";
 	}
 }

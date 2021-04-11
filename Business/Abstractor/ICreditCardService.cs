@@ -7,11 +7,12 @@ using System.Text;
 
 namespace Business.Abstractor
 {
-	public interface ICreditCard
+	public interface ICreditCardService
 	{
 		IResult Add(CreditCard entity);
 		IResult Delete(CreditCard entity);
 		IResult Update(CreditCard entity);
+		IResult MakePayment(CreditCard card);
 
 		IDataResult<List<CreditCard>> GetByCustomerId(int customerId);
 	}
